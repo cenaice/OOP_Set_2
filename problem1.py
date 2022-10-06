@@ -8,7 +8,8 @@ This module contains functions to manipulate polynomials.
 """
 
 # INSERT ALL FUNCTION IMPLEMENTATIONS HERE
-# Document all functions 
+# Document all functions
+
 
 def testPolynomials():
     answer = "y"
@@ -21,12 +22,14 @@ def testPolynomials():
         print("be asked to provide the names of the files   ")
         print("containing the polynomial data.")
         print(" ")
-        filename = input("Enter the name of the first file: ")
+        #filename = input("Enter the name of the first file: ")
+        filename = "poly1.txt"
         P1 = read_polynomial(filename)
         print("The first polynomial has been read, printed below: ")
         print_polynomial(P1)
         print(" ")
-        filename = input("Enter the name of the second file: ")
+        #filename = input("Enter the name of the second file: ")
+        filename = "poly2.txt"
         P2 = read_polynomial(filename)
         print("The second polynomial has been read, printed below: ")
         print_polynomial(P2)
@@ -42,9 +45,12 @@ def testPolynomials():
         print("                  Testing degree, eval_polynomial")
         print("                  ------------------------------")
         print("The degree of the first polynomial is ", degree(P1))
-        print("The first polynomial evaluated at x = 0 gives ", eva_polynomial(P1, 0))
-        print("The first polynomial evaluated at x = 2 gives ", eval_polynomial(P1, 2))
-        print("The first polynomial evaluated at x = -1 gives ", eval_polynomial(P1, -1))
+        print("The first polynomial evaluated at x = 0 gives ",
+              eval_polynomial(P1, 0))
+        print("The first polynomial evaluated at x = 2 gives ",
+              eval_polynomial(P1, 2))
+        print("The first polynomial evaluated at x = -1 gives ",
+              eval_polynomial(P1, -1))
 
         print(" ")
         dummy = input("Hit enter key to continue.")
@@ -53,7 +59,7 @@ def testPolynomials():
         print("                   Testing addterm, removeterm  ")
         print("                  ------------------------------")
         print("I am adding the term 6x^5 to the first polynomial.")
-        addterm(P1, 5, 6)
+        P1 = addterm(P1, 5, 6)
         print("The first polynomial is now: ")
         print_polynomial(P1)
         print("I am removing the term with exponent 5 from the first polynomial.")
@@ -66,7 +72,7 @@ def testPolynomials():
         print(" ")
         print("                  ------------------------------")
         print("                     Testing scalePolynomial    ")
-        print("                  ------------------------------")    
+        print("                  ------------------------------")
         sP = scale_polynomial(P1, 2)
         print("The first polynomial scaled by 2 is as follows:")
         print_polynomial(sP)
@@ -80,7 +86,7 @@ def testPolynomials():
         sum = sum_polynomial(P1, P2)
         print("(Sum) first polynomial + second polynomial equals: ")
         print_polynomial(sum)
-        
+
         print(" ")
         dummy = input("Hit enter key to continue.")
         print(" ")
@@ -90,20 +96,20 @@ def testPolynomials():
         diff = diff_polynomial(P1, P2)
         print("(Difference) first polynomial - second polynomial equals: ")
         print_polynomial(diff)
-        
+
         print(" ")
         dummy = input("Hit enter key to continue.")
         print(" ")
         print("                  ------------------------------")
         print("                      Testing prodPolynomial    ")
-        print("                  ------------------------------")    
+        print("                  ------------------------------")
         prod = prod_polynomial(P1, P2)
         print("(Product) first polynomial * second polynomial equals: ")
         print_polynomial(prod)
 
         print(" ")
         answer = input("Run the tests again? [y/n] ")
-    
+
     print("Goodbye!!")
 
 
@@ -112,73 +118,145 @@ def read_polynomial(filename):
     This function converts our text file into a dictionary
     where the key:value pair is the term and the exponent.
     """
-    # To open and read filename (poly1, poly2)
-
-    poly_dict = {}
     
     file = open(filename, "r")
     data = file.readlines()
+    numbers = []
+    poly_dict = {}
 
-    # to sort data before reading
     for line in data:
-        
-        nums = line.split()
-        print(nums)
-        poly_dict[int(nums[0])] = int(nums[1])
+        nums = list(map(int, line.split(" ")))
+        numbers.append(nums)
 
-        
+    numbers.sort()                          # Sort our terms by highest degree
+    numbers.reverse()                       # Reverse for highest to least.
 
-    file.close()    
+    # Transfer polynomials to dictionary
+    for num in numbers:
+        poly_dict[num[0]] = num[1]
+    file.close()
 
     return poly_dict
+
 
 def print_polynomial(P):
     """This function converts our dictionary into a readable polynomial."""
     polynomial = ""
-    print(P)
 
     # Find a way to sort our polynomial by exponent
 
-    for key, val in P.items():
-        if key or val != 0:
-            polynomial += f"{val}x^{key} + "
-        elif key == 1:
-            polynomial += f"{val}x + "
-        else:
-            polynomial += f"{val} + "
+    # Key = Exponent, Val = Coefficient
+    for term, coeff in P.items():
+        if term > 1 and abs(coeff) > 1:
+            polynomial += f"{coeff}x^{term} + "
 
-    # Remove trailing + signs and print        
+        elif term == 1 and abs(coeff) > 1:
+            polynomial += f"{coeff}x + "
+
+        elif term == 1 and abs(coeff) == 1:
+            polynomial += "x + "
+
+        else:
+            polynomial += f"{coeff} + "
+
+    # Remove trailing + signs and print
     print(polynomial.strip(" + "))
+
 
 def degree(P):
     # Print the key of the first item in our sorted dictionary
     degree = list(P.keys())[0]
     return degree
-    
-def eva_polynomial(P, X):
+
+
+def eval_polynomial(P, X):
     # function should evaluate P at x = x and return result
-    for key, val in P.items():
-        pass
+    result = 0
+    for term, coeff in P.items():
+        if term > 1:
+            result += coeff * (X**term)
+        else:
+            result += coeff
+    return result
+
+
 def addterm(P, exp, coeff):
-    pass
+    """
+        Function will add the new coefficient and exponent to our polynomial while keeping 
+        the dictionary in order by terms
+    """
 
-def removeterm(P,exp):
-    pass
+    new_dict = {}
+    for key, val in P.items():
+        if key < exp:
+            new_dict[exp] = coeff
+            new_dict[key] = val
+        elif key == exp:
+            new_dict[exp] = (P[exp]+coeff)
+        else:
+            new_dict[key] = val
+    return new_dict
 
-def scale_polynomial(P1, P2):
 
-    pass
+
+def removeterm(P, exp):
+    """
+        This function will remove the exponent if it exists as a key value pair
+    """
+    if exp in P:
+        del P[exp]        
+
+
+def scale_polynomial(P1, s):
+    """
+        We will scale our polynomial by multiplying the value in our dictionary by two
+    """
+    sP = {}
+    for key in P1:
+        sP[key] = P1[key]*2
+
+    return sP
+
+
 
 def sum_polynomial(P1, P2):
-    pass
+    """
+        This function will create a new dictionary of the two polynomials 
+        passed in added together
+    """
+
+    sum_poly = P1
+    for term, coeff in P2.items():
+            sum_poly = addterm(sum_poly,term, coeff)
+
+    return sum_poly
 
 def diff_polynomial(P1, P2):
-    pass
+    """This function creates a new polynomial that is the difference of the two."""
+    diff_poly = P1
+
+    for term, coeff in P2.items():
+            diff_poly = addterm(diff_poly, term, coeff*-1)            
+    return diff_poly
+    
+    
+
 
 def prod_polynomial(P1, P2):
-    pass
-
-
+    # Terms get added together, Coeff gets multiplied
+    prod_poly = {}
+    print(P1)
+    print(P2)
+    for key, val in P1.items():
+        for term, coeff in P2.items():
+            new_term = term + key
+            new_coeff = coeff * val
+            if new_term in prod_poly:
+                prod_poly[new_term] += new_coeff
+            else:
+                prod_poly[new_term] = new_coeff
+    
+    return prod_poly
 
 if __name__ == "__main__":
     testPolynomials()
