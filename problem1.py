@@ -10,8 +10,8 @@ This module contains functions to manipulate polynomials.
 # INSERT ALL FUNCTION IMPLEMENTATIONS HERE
 def read_polynomial(filename):
     """
-        This function converts our text file into a dictionary
-        where the key:value pair is the term and the exponent.
+        This function takes in a textfile(filename) and converts into a 
+        dictionary where the key:value pair is the term and the exponent.
     """
     
     file = open(filename, "r")
@@ -23,8 +23,8 @@ def read_polynomial(filename):
         nums = list(map(int, line.split(" ")))
         numbers.append(nums)
 
-    numbers.sort()                          # Sort our terms by highest degree
-    numbers.reverse()                       # Reverse for highest to least.
+    numbers.sort()           # Sort our terms by highest degree
+    numbers.reverse()        # Reverse for highest to least.
 
     # Transfer polynomials to dictionary
     for num in numbers:

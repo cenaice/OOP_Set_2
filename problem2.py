@@ -59,6 +59,7 @@ def cosine_similarity(docfile1, docfile2):
         if key in file_2_dict:
             cosine_sum += (file_1_dict[key] * file_2_dict[key])
 
+
     # Created a function to find the sqrt of a-nth^2/b-nth^2
     def cosine_root(file_dict):
         val = 0
@@ -68,11 +69,14 @@ def cosine_similarity(docfile1, docfile2):
 
     a = cosine_root(file_1_dict)
     b = cosine_root(file_2_dict)
-    
-    # Plug in final formula values
-    ans = cosine_sum / (a * b)
+
+
+
+
+    # Plug in final formula values, rounding to remove floating point 
+    ans = cosine_sum / round((a * b),4)
     return ans
 
 
-# freq_dictionary("doc3.txt")
-# cosine_similarity("doc1.txt","doc2.txt")
+freq_dictionary("doc3.txt")
+print(cosine_similarity("doc1.txt","doc2.txt"))
