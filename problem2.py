@@ -6,9 +6,6 @@ Object Oriented Programming (50:198:113), Fall 2022
 
 This module contains functions to compare files for cosine similarity. 
 """
-
-
-
 from math import sqrt
 
 
@@ -77,6 +74,6 @@ def cosine_similarity(docfile1, docfile2):
     ans = cosine_sum / round((a * b),4)
     return ans
 
-
-freq_dictionary("doc3.txt")
-print(cosine_similarity("doc1.txt","doc2.txt"))
+# Calling function
+#freq_dictionary("doc3.txt")
+#print(cosine_similarity("doc1.txt","doc2.txt"))

@@ -297,6 +297,6 @@ def testPolynomials():
 
 
 
-
-if __name__ == "__main__":
-    testPolynomials()
+# Calling function
+#if __name__ == "__main__":
+#    testPolynomials()
